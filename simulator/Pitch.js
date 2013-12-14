@@ -4,24 +4,24 @@
 	
 	w.Pitch = new Class({
 		
+		fps:               30,
 		dimensions:        {x: 20, y: 10},
 		meter:             42,
 		showRegions:       true,
-		spots:             {},
+		playingArea:       {},
 		
 		ball:              null,
 		redTeam:           null,
 		blueTeam:          null,
 		redGoal:           null,
 		blueGoal:          null,
-		playingArea:       null,
 		totalRegions:      {x: 6, y: 3},
 		regions:           [],
 		gameOn:            false,
 		goalKeeperHasBall: false,
 		
 		initialize: function () {
-			this.draw();
+			this.draw().update();
 		},
 		
 		draw: function () {
@@ -41,18 +41,20 @@
 			w.Soccer.Background.draw();
 			
 			// Set spots
-			this.spots.leftTop     = {x: 0, y: 0};
-			this.spots.rightBottom = {x: this.width, y: this.height};
-			this.spots.center      = {x: this.width / 2, y: this.height / 2};
+			this.playingArea.leftTop     = {x: 0, y: 0};
+			this.playingArea.rightBottom = {x: this.width, y: this.height};
+			this.playingArea.center      = {x: this.width / 2, y: this.height / 2};
 			
 			this.drawCenterCircle();
 			this.createRegions();
+			
+			return this;
 		},
 		
 		drawCenterCircle: function () {
 			this.centerCircle = new Kinetic.Circle({
-				x: this.spots.center.x,
-				y: this.spots.center.y,
+				x: this.playingArea.center.x,
+				y: this.playingArea.center.y,
 				radius: Math.round(this.height / 4.5),
 				fill: 'transparent',
 				stroke: 'rgba(255, 255, 255, 0.5)',
@@ -67,8 +69,8 @@
 		
 		drawCenterSpot: function () {
 			this.centerSpot = new Kinetic.Circle({
-				x: this.spots.center.x,
-				y: this.spots.center.y,
+				x: this.playingArea.center.x,
+				y: this.playingArea.center.y,
 				radius: 4,
 				fill: 'rgba(255, 255, 255, 0.5)'
 			});
@@ -137,7 +139,22 @@
 		},
 		
 		update: function () {
+			var _this = this, draw, now, then = Date.now(), interval = 1000/this.fps, delta;
 			
+			function run() {
+				requestAnimationFrame(run);
+				
+				now = Date.now();
+				delta = now - then;
+				
+				if (delta > interval) {
+					then = now - (delta % interval);
+					
+					_this.render();
+				}
+			}
+			
+			run();
 		},
 		
 		render: function () {

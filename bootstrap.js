@@ -45,7 +45,10 @@
 	w.Soccer.Stage.add(w.Soccer.Foreground);
 	
 	preloadAssets({
-		background: 'assets/img/grass.png'
+		background: 'assets/img/grass.png',
+		ball: 'assets/img/ball.png',
+		blue: 'assets/img/blue.png',
+		red:  'assets/img/red.png'
 	}, function () {
 		
 		// Create pitch
@@ -60,6 +63,32 @@
 		// Reference goals in pitch
 		w.Soccer.Pitch.setBlueGoal(w.Soccer.BlueGoal);
 		w.Soccer.Pitch.setRedGoal(w.Soccer.RedGoal);
+		
+		// Create ball
+		w.Soccer.Ball = new Ball();
+		
+		// Reference ball in pitch
+		w.Soccer.Pitch.setBall(w.Soccer.Ball);
+		
+		// Create blue team
+		w.Soccer.BlueTeam = new Team({
+			color: 'blue',
+			facing: 'right'
+		});
+		
+		// Create red team
+		w.Soccer.RedTeam = new Team({
+			color: 'red',
+			facing: 'left'
+		});
+		
+		// Set otherTream
+		w.Soccer.BlueTeam.otherTeam = w.Soccer.RedTeam;
+		w.Soccer.RedTeam.otherTeam  = w.Soccer.BlueTeam;
+		
+		// Reference teams in pitch
+		w.Soccer.Pitch.setBlueTeam(w.Soccer.BlueTeam);
+		w.Soccer.Pitch.setRedTeam(w.Soccer.RedTeam);
 		
 	});
 	
