@@ -97,6 +97,12 @@
 			this.options.supportingPlayer = player;
 		},
 		
+		findSupportingPlayer: function () {
+			if (!this.options.playerClosestToBall) {
+				return false;
+			}
+		},
+		
 		findPlayerClosestToBall: function () {
 			var shortest = false, position, distance, closestToBall;
 			
@@ -127,7 +133,7 @@
 		},
 		
 		setPlayerClosestToBall: function (player) {
-			if (this.options.playerClosestToBall) {
+			if (this.options.playerClosestToBall && player.options.number !== this.options.playerClosestToBall.options.number) {
 				this.options.playerClosestToBall.handleMessage('wait');
 			}
 			

@@ -64,6 +64,21 @@
 		
 		placeAtPosition: function (coords) {
 			
+		},
+		
+		move: function (x, y) {
+			var speed = Number.random(1, 2);
+		
+			this.travelling = new Kinetic.Tween({
+				node: this.element,
+				duration: speed,
+				x: x,
+				y: y,
+				onFinish: function () {
+				}.bind(this)
+			});
+		
+			this.travelling.play();
 		}
 		
 	});
