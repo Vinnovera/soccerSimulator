@@ -18,14 +18,17 @@
 		
 		otherTeam: null,
 		
-		players: [],
+		fieldPlayers: [],
+		
+		goalKeeper: null,
 		
 		initialize: function (options) {
 			this.setOptions(options);
-			this.createPlayers();
+			this.createFieldPlayers();
+			this.createGoalKeeper();
 		},
 		
-		createPlayers: function () {
+		createFieldPlayers: function () {
 			var i, max = 4, player, regions, positions = [
 				'defender',
 				'defender',
@@ -40,18 +43,42 @@
 			}
 			
 			for (i = 0; i < 4; i += 1) {
-				player = new w.Player(this, {
+				player = new w.FieldPlayer(this, {
 					homeRegion: w.Soccer.Pitch.regions[regions[i]],
 					position: positions[i],
 					number: i + 2
 				});
 				
-				this.players.push(player);
+				this.fieldPlayers.push(player);
 			}
 		},
 		
-		update: function () {
+		createGoalKeeper: function () {
+			var goalKeeper = new w.GoalKeeper(this, {
+				homeRegion: (this.options.color === 'blue') ? w.Soccer.Pitch.regions[1] : w.Soccer.Pitch.regions[16],
+				position: 'goalkeeper',
+				number: 1
+			});
 			
+			this.goalKeeper = goalKeeper;
+		},
+		
+		update: function () {
+			if (!w.Soccer.Pitch.gameOn) {
+				return;
+			}
+			
+			this.findPlayerClosestToBall();
+			
+			if (!w.Soccer.Pitch.ball.owner) {
+				this.options.playerClosestToBall.handleMessage('chaseBall');
+			} else if (w.Soccer.Pitch.ball.owner.team.options.color !== this.options.color) {
+				this.wait();
+			} else {
+				
+				//console.log(this.options.controllingPlayer.isThreatened());
+				
+			}
 		},
 		
 		render: function () {
@@ -70,16 +97,73 @@
 			this.options.supportingPlayer = player;
 		},
 		
+		findPlayerClosestToBall: function () {
+			var shortest = false, position, distance, closestToBall;
+			
+			Array.each(this.fieldPlayers, function (player, i) {
+				position = player.element.getPosition();
+				distance = this.lineDistance(position, w.Soccer.Pitch.ball.element.getPosition());
+				
+				if (!shortest || distance < shortest) {
+					shortest = distance;
+					closestToBall = player;
+				}
+			}.bind(this));
+			
+			this.setPlayerClosestToBall(closestToBall);
+		},
+		
+		lineDistance: function (from, to) {
+			var xs = 0,
+			    ys = 0;
+
+			xs = to.x - from.x;
+			xs = xs * xs;
+
+			ys = to.y - from.y;
+			ys = ys * ys;
+
+			return Math.sqrt( xs + ys );
+		},
+		
 		setPlayerClosestToBall: function (player) {
+			if (this.options.playerClosestToBall) {
+				this.options.playerClosestToBall.handleMessage('wait');
+			}
+			
 			this.options.playerClosestToBall = player;
 		},
 		
 		returnAllFieldPlayersToHome: function () {
+			this.defending();
 			
+			Array.each(this.fieldPlayers, function (player, i) {
+				player.handleMessage('returnHome');
+			});
 		},
 		
 		allPlayersAtHome: function () {
+			allPlayersHome = true;
 			
+			Array.each(this.fieldPlayers, function (player) {
+				if (!player.isHome) {
+					allPlayersHome = false;
+				}
+			});
+			
+			if (allPlayersHome) {
+				if (!this.goalKeeper.isHome) {
+					allPlayersHome = false;
+				}
+			}
+			
+			return allPlayersHome;
+		},
+		
+		wait: function () {
+			Array.each(this.fieldPlayers, function (player) {
+				player.handleMessage('wait');
+			});
 		},
 		
 		updateTargetsOfWaitingPlayers: function () {
@@ -113,11 +197,35 @@
 		},
 		
 		defending: function () {
+			var regions;
 			
+			if (this.options.color === 'blue') {
+				regions = [3, 5, 6, 8];
+			} else {
+				regions = [14, 12, 11, 9];
+			}
+			
+			this.options.currentState = 'defending';
+			
+			Array.each(this.players, function (player, i) {
+				player.options.homeRegion = w.Soccer.Pitch.regions[regions[i]];
+			});
 		},
 		
 		attacking: function () {
+			var regions;
 			
+			if (this.options.color === 'blue') {
+				regions = [4, 8, 12, 14];
+			} else {
+				regions = [13, 9, 5, 3];
+			}
+			
+			this.options.currentState = 'attacking';
+			
+			Array.each(this.players, function (player, i) {
+				player.options.homeRegion = w.Soccer.Pitch.regions[regions[i]];
+			});
 		}
 		
 	});

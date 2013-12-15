@@ -139,9 +139,9 @@
 		},
 		
 		update: function () {
-			var _this = this, draw, now, then = Date.now(), interval = 1000/this.fps, delta;
+			var _this = this, draw, now, then = Date.now(), interval = 1000/this.fps, delta, run;
 			
-			function run() {
+			run = function () {
 				requestAnimationFrame(run);
 				
 				now = Date.now();
@@ -150,15 +150,40 @@
 				if (delta > interval) {
 					then = now - (delta % interval);
 					
-					_this.render();
+					if (!this.gameOn) {
+						this.startGame();
+					}
+					
+					// Update teams
+					this.blueTeam.update();
+					this.redTeam.update();
+					
+					// Update ball
+					this.ball.update();
+					
+					// Update goals
+					this.blueGoal.update();
+					this.redGoal.update();
+					
+					// Redraw foreground
+					this.render();
 				}
-			}
+			}.bind(this);
 			
 			run();
 		},
 		
 		render: function () {
 			w.Soccer.Foreground.draw();
+		},
+		
+		startGame: function () {
+			if (this.blueTeam && this.redTeam && this.ball && this.blueGoal && this.redGoal) {
+				this.gameOn = true;
+				return true;
+			}
+			
+			return false;
 		},
 		
 		setBall: function (ball) {

@@ -55,7 +55,11 @@
 		},
 		
 		trap: function (owner) {
-			// Set owner
+			this.owner = owner;
+			
+			if (this.travelling) {
+				this.travelling.destroy();
+			}
 		},
 		
 		placeAtPosition: function (coords) {
