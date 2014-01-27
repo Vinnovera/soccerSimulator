@@ -64,19 +64,44 @@
 		},
 		
 		update: function () {
+			// If the game is stopped, do nothing
 			if (!w.Soccer.Pitch.gameOn) {
 				return;
 			}
 			
+			Array.each(this.fieldPlayers, function (player, i) {
+				player.update();
+			});
+			
+			// Locate the player who is closest to the ball
 			this.findPlayerClosestToBall();
 			
+			// If no one in the team has the ball, chase it, otherwise go to attack
 			if (!w.Soccer.Pitch.ball.owner) {
 				this.options.playerClosestToBall.handleMessage('chaseBall');
 			} else if (w.Soccer.Pitch.ball.owner.team.options.color !== this.options.color) {
-				this.wait();
-			} else {
+				// The opponent has the ball, enter defence mode
+				if (this.allPlayersAtHome()) {
+					this.wait();
+				} else {
+					this.returnAllFieldPlayersToHome();
+				}
 				
-				//console.log(this.options.controllingPlayer.isThreatened());
+				// Now check if you can take him down right now or if you have to get to the ball first
+				/*if (this.options.playerClosestToBall.inTackleRange()) {
+					
+				} else {
+					this.options.playerClosestToBall.handleMessage('chaseBall');
+				}*/
+			} else {
+				// You have the ball, enter attack mode
+				
+				// Mow check if the player is threatened or have time to think
+				if (this.options.controllingPlayer.isThreatened()) {
+					
+				} else {
+					
+				}
 				
 			}
 		},
@@ -149,7 +174,7 @@
 		},
 		
 		allPlayersAtHome: function () {
-			allPlayersHome = true;
+			var allPlayersHome = true;
 			
 			Array.each(this.fieldPlayers, function (player) {
 				if (!player.isHome) {

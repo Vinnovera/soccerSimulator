@@ -61,7 +61,20 @@
 		},
 		
 		update: function () {
+			var ballPosition    = w.Soccer.Pitch.ball.element.getPosition(),
+			    currentPosition = this.element.getPosition();
 			
+			if (!this.running) {
+				// Keep your eyes on the ball
+				this.rotateTo(currentPosition, ballPosition);
+			}
+			
+			// Is home?
+			if (currentPosition.x === this.options.homeRegion.centerX && currentPosition.y === this.options.homeRegion.centerY) {
+				this.isHome = true;
+			} else {
+				this.isHome = false;
+			}
 		},
 		
 		render: function () {
@@ -75,6 +88,7 @@
 		messages: {
 			returnHome: function () {
 				this.state = 'returnToHomeRegion';
+				this.returnToHome();
 			},
 			
 			chaseBall: function () {
@@ -128,6 +142,31 @@
 					this.running.play();
 				}
 			}
+		},
+		
+		returnToHome: function () {
+			if (this.running) {
+				this.running.destroy();
+				this.running = false;
+			}
+			
+			var speed = 1,
+			    currentPosition = this.element.getPosition(),
+				to    = {x: this.options.homeRegion.centerX, y: this.options.homeRegion.centerY};
+			
+			this.rotateTo(currentPosition, to);
+			
+			this.running = new Kinetic.Tween({
+				node: this.element,
+				duration: speed,
+				x: this.options.homeRegion.centerX,
+				y: this.options.homeRegion.centerY,
+				onFinish: function () {
+					this.handleMessage('waiting');
+				}.bind(this)
+			});
+		
+			this.running.play();
 		},
 		
 		rotateTo: function (position, toPosition) {
