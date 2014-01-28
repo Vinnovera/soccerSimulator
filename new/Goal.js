@@ -6,8 +6,6 @@
 		
 		Extends: w.Base,
 		
-		Implements: Options,
-		
 		leftPost:  null,
 		rightPost: null,
 		facing:    null,

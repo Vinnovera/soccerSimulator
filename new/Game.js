@@ -2,19 +2,41 @@
 	
 	'use strict';
 	
+	/**
+	 * The Game class holds it all together.
+	 * Rendering and updating will be taken care of from here
+	 * and holds the basic simulator options.
+	 * @class
+	 */
 	w.Game = new Class({
+		/** @lends Game */
+		
+		Extends: w.Base,
 		
 		Implements: Options,
 		
+		/** Options that can be set */
 		options: {
+			/**
+			 * Set on which side the home team should play on
+			 * @memberOf Game
+			 * @type String
+			 */
 			homeSide: 'left',
-			awaySide: 'right',
-			field: {}
+			
+			/**
+			 * Set on which side the away team should play on
+			 * @memberOf Game
+			 * @type String
+			 */
+			awaySide: 'right'
 		},
 		
-		Images:   {}, // Store preloaded images in here
+		/** Stores preloaded images */
+		Images:   {},
 		
-		Actions:  [], // Each action will run when the game is ready to begin
+		/** Holds actions that are registred through the register method */
+		Actions:  [],
 		
 		field:    null,
 		ball:     null,
@@ -25,6 +47,8 @@
 		gameOn:   false,
 		goalKeeperHasBall: false,
 		
+		/**
+		 */
 		initialize: function (id, options) {
 			this.id = id;
 			
@@ -32,6 +56,8 @@
 			this.build();
 		},
 		
+		/**
+		 */
 		ready: function () {
 			var _this = this;
 			
@@ -44,10 +70,14 @@
 			});
 		},
 		
+		/**
+		 */
 		register: function (action) {
 			this.Actions.push(action);
 		},
 		
+		/**
+		 */
 		preloadAssets: function (sources, callback) {
 			var _this        = this,
 			    loadedImages = 0,
@@ -71,6 +101,8 @@
 			}
 		},
 		
+		/**
+		 */
 		build: function () {
 			// Create new kinetic stage
 			this.Stage = new Kinetic.Stage({
