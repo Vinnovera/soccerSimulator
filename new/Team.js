@@ -45,10 +45,16 @@
 			return this;
 		},
 		
-		addPlayer: function (player) {
-			var player = new w.Player(this, player);
+		addFieldPlayer: function (player) {
+			var player = new w.FieldPlayer(this, player);
 			
 			this.fieldPlayers.push(player);
+		},
+		
+		addGoalkeeper: function (goalkeeper) {
+			var goalkeeper = new w.Goalkeeper(this, goalkeeper);
+			
+			this.goalkeeper.push(goalkeeper);
 		},
 		
 		dummyPlayers: function (players) {
@@ -60,13 +66,13 @@
 			];
 			
 			if (this.facing === 'right') {
-				regions = [3, 5, 6, 8];
+				regions = [13, 10, 26, 21];
 			} else {
-				regions = [14, 12, 11, 9];
+				regions = [58, 61, 45, 50];
 			}
 			
 			for (i = 0; i < players; i += 1) {
-				this.addPlayer({
+				this.addFieldPlayer({
 					number: i + 2,
 					attributes: {
 						strength:   Number.random(0, 1000),
