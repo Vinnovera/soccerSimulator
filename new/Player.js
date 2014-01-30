@@ -2,30 +2,24 @@
 	
 	'use strict';
 	
+	/**
+	 * The Player class is the base of fieldplayers and goalkeepers.
+	 * @class
+	 */
 	w.Player = new Class({
+		/** @lends Player */
 		
 		Extends: w.Base,
 		
 		Implements: Options,
 		
+		/** Options that can be set */
 		options: {
 			number: 1,
-			name: null,
 			homeRegion: null,
 			
-			attributes: {
-				strength:   0,
-				stamina:    0,
-				pace:       0,
-				agility:    0,
-				precision:  0,
-				defense:    0,
-				attack:     0,
-				skillmoves: 0,
-				intercept:  0
-			},
-			
 			info: {
+				name:       null,
 				height:     null,
 				weight:     null,
 				foot:       null,
@@ -33,11 +27,24 @@
 			}
 		},
 		
+		/** Boolean to query to see if a player has the ball */
 		hasBall: false,
+		
+		/** Holds the player state */
 		state: null,
+		
+		/** The player's team */
 		team: null,
+		
+		/** Query to see if the player is in its home region */
 		isHome: true,
 		
+		/**
+		 * The constructor. Will automatically be called when a new instance of this class is created.
+		 *
+		 * @param {Object} team The team who owns this player
+		 * @param {Object} options The options to set.
+		 */
 		initialize: function (team, options) {
 			this.team = team;
 			this.setOptions(options);
