@@ -19,23 +19,23 @@
 		build: function () {
 			if (this.facing === 'right') {
 	 			this.leftPost = {
-					x: w.Soccer.field.regions[2].left,
-					y: w.Soccer.field.regions[2].top
+					x: w.Soccer.field.regions[1].left,
+					y: w.Soccer.field.regions[1].top
 				};
 			
 				this.rightPost = {
-					x: w.Soccer.field.regions[4].left,
-					y: w.Soccer.field.regions[4].bottom
+					x: w.Soccer.field.regions[1].left,
+					y: w.Soccer.field.regions[1].bottom
 				};
 			} else {
 	 			this.rightPost = {
-					x: w.Soccer.field.regions[68].right,
-					y: w.Soccer.field.regions[68].top
+					x: w.Soccer.field.regions[16].right,
+					y: w.Soccer.field.regions[16].top
 				};
 			
 				this.leftPost = {
-					x: w.Soccer.field.regions[70].right,
-					y: w.Soccer.field.regions[70].bottom
+					x: w.Soccer.field.regions[16].right,
+					y: w.Soccer.field.regions[16].bottom
 				};
 			}
 			
@@ -50,12 +50,12 @@
 		
 		drawGoalKeeperArea: function () {
 			this.goalKeeperArea = new Kinetic.Rect({
-				width: w.Soccer.field.regions[1].width,
-				height: w.Soccer.field.regions[1].height * 2,
+				width: w.Soccer.field.regions[1].width / 2,
+				height: w.Soccer.field.regions[1].height,
 				fill: 'transparent',
 				stroke: 'rgba(255, 255, 255, 0.4)',
 				strokeWidth: 2,
-				x: (this.facing === 'right') ? this.leftPost.x - 2 : this.leftPost.x - w.Soccer.field.regions[1].width,
+				x: (this.facing === 'right') ? this.leftPost.x - 2 : this.leftPost.x - w.Soccer.field.regions[1].width / 2,
 				y: (this.facing === 'right') ? this.leftPost.y : this.rightPost.y
 			});
 			

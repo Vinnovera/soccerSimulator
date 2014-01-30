@@ -13,7 +13,7 @@
 			dimensions: {x: 20, y: 10},
 			meters: 42,
 			showRegions: true,
-			totalRegions: {x: 12, y: 6}
+			totalRegions: {x: 6, y: 3}
 		},
 		
 		regions: [],

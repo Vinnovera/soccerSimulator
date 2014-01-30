@@ -31,6 +31,10 @@
 				foot:       null,
 				mentality:  null
 			}
+		},
+		
+		update: function () {
+			
 		}
 		
 	});

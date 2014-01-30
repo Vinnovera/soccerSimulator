@@ -37,7 +37,14 @@
 		},
 		
 		update: function () {
-			// Update each player
+			/** Update field players */
+			Array.each(this.fieldPlayers, function (player) {
+				player.update();
+			});
+			
+			/** Update goalkeeper */
+			this.goalkeeper.update();
+			
 			return this;
 		},
 		
@@ -54,11 +61,11 @@
 		addGoalkeeper: function (goalkeeper) {
 			var goalkeeper = new w.Goalkeeper(this, goalkeeper);
 			
-			this.goalkeeper.push(goalkeeper);
+			this.goalkeeper = goalkeeper;
 		},
 		
 		dummyPlayers: function (players) {
-			var i, regions, positions = [
+			var i, regions, goalkeeperRegion, positions = [
 				'defender',
 				'defender',
 				'attacker',
@@ -66,9 +73,11 @@
 			];
 			
 			if (this.facing === 'right') {
-				regions = [13, 10, 26, 21];
+				regions = [4, 6, 8];
+				goalkeeperRegion = 1;
 			} else {
-				regions = [58, 61, 45, 50];
+				regions = [13, 11, 9];
+				goalkeeperRegion = 16;
 			}
 			
 			for (i = 0; i < players; i += 1) {
@@ -88,6 +97,20 @@
 					homeRegion: w.Soccer.field.regions[regions[i]]
 				});
 			}
+			
+			this.addGoalkeeper({
+				number: 1,
+				attributes: {
+					reflexes:   Number.random(0, 1000),
+					stamina:    Number.random(0, 1000),
+					pace:       Number.random(0, 1000),
+					agility:    Number.random(0, 1000),
+					precision:  Number.random(0, 1000),
+					skillmoves: Number.random(0, 1000),
+					intercept:  Number.random(0, 1000)
+				},
+				homeRegion: w.Soccer.field.regions[goalkeeperRegion]
+			});
 		},
 		
 		defending: function () {

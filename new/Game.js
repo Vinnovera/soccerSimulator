@@ -65,9 +65,6 @@
 			
 			/** Setup kinetic stage and layers */
 			this.build();
-			
-			/** Start the updating */
-			this.update();
 		},
 		
 		/**
@@ -83,6 +80,9 @@
 			Array.each(this.Actions, function (action) {
 				action.apply(_this);
 			});
+			
+			/** Start updating */
+			this.update();
 		},
 		
 		/**
@@ -163,9 +163,24 @@
 				if (delta > interval) {
 					then = now - (delta % interval);
 					
+					/** Check if game is on */
 					if (!this.gameOn) {
 						this.startGame();
 					}
+					
+					/** Update ball */
+					this.ball.update();
+					
+					/** Update field */
+					this.field.update();
+					
+					/** Update goals */
+					this.homeGoal.update();
+					this.awayGoal.update();
+					
+					/** Update teams */
+					this.homeTeam.update();
+					this.awayTeam.update();
 					
 					/** Redraw foreground */
 					this.render();

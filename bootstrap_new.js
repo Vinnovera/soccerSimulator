@@ -31,7 +31,7 @@
 		});
 		
 		// Create dummy players
-		this.homeTeam.dummyPlayers(4);
+		this.homeTeam.dummyPlayers(3);
 	});
 	
 	// Create away team
@@ -44,7 +44,7 @@
 		});
 		
 		// Create dummy players
-		this.awayTeam.dummyPlayers(4);
+		this.awayTeam.dummyPlayers(3);
 	});
 	
 	// Preload assets

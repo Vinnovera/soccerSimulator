@@ -29,6 +29,10 @@
 				weight:     null,
 				foot:       null
 			}
+		},
+		
+		update: function () {
+			
 		}
 		
 	});

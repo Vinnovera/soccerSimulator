@@ -87,7 +87,6 @@
 		},
 		
 		update: function () {
-			// Update each player
 			return this;
 		},
 		
